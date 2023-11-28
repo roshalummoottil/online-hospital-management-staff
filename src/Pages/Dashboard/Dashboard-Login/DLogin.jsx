@@ -156,11 +156,11 @@ const DLogin = () => {
     <>
       <ToastContainer />
 
-      <div className="homeaddDoc">
-        <div className="left">
+      <div className="mainLoginPage">
+        <div className="leftside">
           <img src={introduction} alt="Intro.jpeg" />
         </div>
-        <div className="right">
+        <div className="rightside">
           <h1>Login</h1>
           <div>
             <Radio.Group
@@ -284,3 +284,4 @@ const DLogin = () => {
 };
 
 export default DLogin;
+
