@@ -70,32 +70,32 @@ const Nurse_Profile = () => {
   return (
     <>
       {contextHolder}
-      <div className="well">
+      <div className="container">
         <Sidebar />
-        <div className="besidenavigationmenu">
-          <div className="homeaddDoc">
-            <div className="first">
+        <div className="AfterSideBar">
+          <div className="maindoctorProfile">
+            <div className="firstBox doctorfirstdiv">
               <div>
                 <img src={user?.image} alt="userimg" />
               </div>
               <hr />
-              <div className="symbol">
+              <div className="singleitemdiv">
                 <RiNurseFill  />
                 <p>{user?.nurseName}</p>
               </div>
-              <div className="symbol">
+              <div className="singleitemdiv">
                 <RiDropFill  />
                 <p>{user?.bloodGroup}</p>
               </div>
-              <div className="symbol">
+              <div className="singleitemdiv">
                 <RiCake2Fill  />
                 <p>{user?.DOB}</p>
               </div>
-              <div className="symbol">
+              <div className="singleitemdiv">
                 <RiPhoneFill />
                 <p>{user?.mobile}</p>
               </div>
-              <div className="symbol">
+              <div className="singleitemdiv">
                 <button onClick={isModal}>
                   {" "}
                   <AiFillEdit />
@@ -176,15 +176,15 @@ const Nurse_Profile = () => {
                 <h2 style={{ textAlign: "center", marginTop: "10px" }}>
                   Shift Information
                 </h2>
-                <div className="symbol">
+                <div className="singleitemdiv">
                   <RiCompass2Fill  />
                   <p>6:00 AM - 9:00 PM</p>
                 </div>
-                <div className="symbol">
+                <div className="singleitemdiv">
                   <RiDoorOpenFill  />
                   <p>Atrium</p>
                 </div>
-                <div className="symbol">
+                <div className="singleitemdiv">
                   <RiMapPin2Fill  />
                   <p>
                     Charlotte NC

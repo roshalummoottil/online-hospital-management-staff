@@ -55,10 +55,10 @@ const Book_Appointment = () => {
   return (
     <>
       <ToastContainer />
-      <div className="well">
+      <div className="container">
         <Sidebar />
-        <div className="besidenavigationmenu">
-          <div className="homeaddDoc">
+        <div className="AfterSideBar">
+          <div className="Main_Add_Doctor_div">
             <h1>Book an Appointment</h1>
             <form onSubmit={HandleOnsubmitAppointment}>
               {/*This is Name section */}

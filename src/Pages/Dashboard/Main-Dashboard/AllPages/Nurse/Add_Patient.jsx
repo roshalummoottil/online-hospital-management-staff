@@ -144,10 +144,10 @@ const Addpatient = () => {
   return (
     <>
       <ToastContainer />
-      <div className="well">
+      <div className="container">
         <Sidebar />
-        <div className="besidenavigationmenu">
-          <div className="homeaddDoc">
+        <div className="AfterSideBar">
+          <div className="Main_Add_Doctor_div">
             <h1>Register New Patient</h1>
             <img src={doctor} alt="doctor" className="avatarimg" />
 
