@@ -2,12 +2,9 @@ import React, { useState } from "react";
 import "../Doctor/CSS/Doctor_Profile.css";
 import { RiCompass2Fill } from "react-icons/ri";
 import { RiNurseFill } from "react-icons/ri";
-import { AiFillCalendar, AiFillEdit } from "react-icons/ai";
+import { AiFillEdit } from "react-icons/ai";
 import { RiDropFill,RiCake2Fill } from "react-icons/ri";
 import { RiPhoneFill } from "react-icons/ri";
-import { BsHouseFill, BsGenderAmbiguous } from "react-icons/bs";
-import { MdOutlineCastForEducation } from "react-icons/md";
-import { FaRegHospital, FaMapMarkedAlt, FaBirthdayCake } from "react-icons/fa";
 import { RiMapPin2Fill } from "react-icons/ri";
 import { RiDoorOpenFill } from "react-icons/ri";
 import Sidebar from "../../GlobalFiles/Sidebar";
@@ -24,7 +21,7 @@ const Nurse_Profile = () => {
 
   const dispatch = useDispatch();
 
-  const [formData, setFormData] = useState({
+  const [data, setFormData] = useState({
     nurseName: user.nurseName,
     age: user.age,
     gender: user.gender,
@@ -35,14 +32,14 @@ const Nurse_Profile = () => {
     ID: user._id,
   });
 
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [isOpen, setOpen] = useState(false);
+  const [isLoading, setConfirmLoading] = useState(false);
 
-  const showModal = () => {
+  const isModal = () => {
     setOpen(true);
   };
 
-  const handleOk = () => {
+  const isHandeled = () => {
     setConfirmLoading(true);
     setTimeout(() => {
       setOpen(false);
@@ -50,56 +47,56 @@ const Nurse_Profile = () => {
     }, 2000);
   };
 
-  const [messageApi, contextHolder] = message.useMessage();
+  const [text, contextHolder] = message.useMessage();
 
-  const success = (text) => {
-    messageApi.success(text);
+  const isOk = (text) => {
+    text.isOk(text);
   };
 
-  const handleCancel = () => {
+  const cancel = () => {
     setOpen(false);
   };
 
-  const handleFormChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const isChange = (e) => {
+    setFormData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const handleFormSubmit = () => {
-    dispatch(UpdateNurse(formData, user._id));
-    success("user updated");
-    handleOk();
+  const Submit = () => {
+    dispatch(UpdateNurse(data, user._id));
+    isOk("user updated");
+    isHandeled();
   };
 
   return (
     <>
       {contextHolder}
-      <div className="container">
+      <div className="well">
         <Sidebar />
-        <div className="AfterSideBar">
-          <div className="maindoctorProfile">
-            <div className="firstBox doctorfirstdiv">
+        <div className="besidenavigationmenu">
+          <div className="homeaddDoc">
+            <div className="first">
               <div>
                 <img src={user?.image} alt="userimg" />
               </div>
               <hr />
-              <div className="singleitemdiv">
+              <div className="symbol">
                 <RiNurseFill  />
                 <p>{user?.nurseName}</p>
               </div>
-              <div className="singleitemdiv">
+              <div className="symbol">
                 <RiDropFill  />
                 <p>{user?.bloodGroup}</p>
               </div>
-              <div className="singleitemdiv">
+              <div className="symbol">
                 <RiCake2Fill  />
                 <p>{user?.DOB}</p>
               </div>
-              <div className="singleitemdiv">
+              <div className="symbol">
                 <RiPhoneFill />
                 <p>{user?.mobile}</p>
               </div>
-              <div className="singleitemdiv">
-                <button onClick={showModal}>
+              <div className="symbol">
+                <button onClick={isModal}>
                   {" "}
                   <AiFillEdit />
                   Edit
@@ -108,35 +105,42 @@ const Nurse_Profile = () => {
 
               <Modal
                 title="Edit details"
-                open={open}
-                onOk={handleOk}
-                confirmLoading={confirmLoading}
-                onCancel={handleCancel}
+                isOpen={isOpen}
+                onOk={isHandeled}
+                isLoading={isLoading}
+                onCancel={cancel}
                 footer={[
-                  <Button key="back" onClick={handleCancel}>
+                  <Button key="back" onClick={cancel}>
                     Cancel
                   </Button>,
-                  <Button key="submit" onClick={handleFormSubmit}>
+                  <Button key="submit" onClick={Submit}>
                     Edit
                   </Button>,
                 ]}
               >
-                <form className="inputForm">
+                <form className="NurseForm">
                   <input
                     name="nurseName"
-                    value={formData.nurseName}
-                    onChange={handleFormChange}
+                    value={data.nurseName}
+                    onChange={isChange}
                     type="text"
                     placeholder="Full name"
                   />
                   <input
                     name="age"
-                    value={formData.age}
-                    onChange={handleFormChange}
+                    value={data.age}
+                    onChange={isChange}
                     type="number"
                     placeholder="Age"
                   />
-                  <select name="gender" onChange={handleFormChange}>
+                  <input
+                    name="mobile"
+                    value={data.mobile}
+                    onChange={isChange}
+                    type="number"
+                    placeholder="mobile"
+                  />
+                  <select name="gender" onChange={isChange}>
                     <option value="">Select gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
@@ -144,29 +148,22 @@ const Nurse_Profile = () => {
                   </select>
                   <input
                     name="bloodGroup"
-                    value={formData.bloodGroup}
-                    onChange={handleFormChange}
+                    value={data.bloodGroup}
+                    onChange={isChange}
                     type="text"
                     placeholder="Blood Group"
                   />
                   <input
                     name="education"
-                    value={formData.education}
-                    onChange={handleFormChange}
+                    value={data.education}
+                    onChange={isChange}
                     type="text"
                     placeholder="education"
                   />
                   <input
-                    name="mobile"
-                    value={formData.mobile}
-                    onChange={handleFormChange}
-                    type="number"
-                    placeholder="mobile"
-                  />
-                  <input
                     name="DOB"
-                    value={formData.DOB}
-                    onChange={handleFormChange}
+                    value={data.DOB}
+                    onChange={isChange}
                     type="date"
                     placeholder="Date of birth"
                   />
@@ -174,43 +171,20 @@ const Nurse_Profile = () => {
               </Modal>
             </div>
             
-            <div className="SecondBox">
-              {/* <div className="subfirstbox">
-                <h2 style={{ textAlign: "center", marginTop: "10px" }}>
-                  Other Info
-                </h2>
-                <div className="singleitemdiv">
-                  <BsGenderAmbiguous className="singledivicons" />
-                  <p>{user?.gender}</p>
-                </div>
-                <div className="singleitemdiv">
-                  <AiFillCalendar className="singledivicons" />
-                  <p>{user?.age}</p>
-                </div>
-
-                <div className="singleitemdiv">
-                  <MdOutlineCastForEducation className="singledivicons" />
-                  <p>{user?.education}</p>
-                </div>
-                <div className="singleitemdiv">
-                  <BsHouseFill className="singledivicons" />
-                  <p>{user?.address}</p>
-                </div>
-              </div> */}
-              {/* ***********  Third Div ******************** */}
-              <div className="subSecondBox">
+            <div className="two">
+              <div className="insideTwo">
                 <h2 style={{ textAlign: "center", marginTop: "10px" }}>
                   Shift Information
                 </h2>
-                <div className="singleitemdiv">
+                <div className="symbol">
                   <RiCompass2Fill  />
                   <p>6:00 AM - 9:00 PM</p>
                 </div>
-                <div className="singleitemdiv">
+                <div className="symbol">
                   <RiDoorOpenFill  />
                   <p>Atrium</p>
                 </div>
-                <div className="singleitemdiv">
+                <div className="symbol">
                   <RiMapPin2Fill  />
                   <p>
                     Charlotte NC

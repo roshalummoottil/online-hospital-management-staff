@@ -8,22 +8,22 @@ import { useNavigate } from "react-router-dom";
 import {
   AdminLogin,
   DoctorLogin,
-  forgetPassword,
+  forgotPassword,
   NurseLogin,
 } from "../../../Redux/auth/action";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Drawer } from "antd";
-const notify = (text) => toast(text);
+const alert = (text) => toast(text);
 
 const DLogin = () => {
   const [open, setOpen] = useState(false);
 
-  const showDrawer = () => {
+  const isShow = () => {
     setOpen(true);
   };
 
-  const onClose = () => {
+  const isclose = () => {
     setOpen(false);
   };
 
@@ -36,11 +36,11 @@ const DLogin = () => {
   });
   const dispatch = useDispatch();
 
-  const Handlechange = (e) => {
+  const isChange = (e) => {
     setFormvalue({ ...formvalue, [e.target.name]: e.target.value });
   };
   const navigate = useNavigate();
-  const HandleSubmit = (e) => {
+  const isSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     if (formvalue.ID !== "" && formvalue.password !== "") {
@@ -51,19 +51,19 @@ const DLogin = () => {
         };
         dispatch(NurseLogin(data)).then((res) => {
           if (res.message === "Successful") {
-            notify("Login Successful");
+            alert("Nurse Login is Successful");
             setLoading(false);
             return navigate("/dashboard");
           }
           if (res.message === "Wrong credentials") {
             setLoading(false);
 
-            notify("Wrong credentials");
+            alert("Please check your credentials");
           }
           if (res.message === "Error") {
             setLoading(false);
 
-            notify("Something went Wrong, Please Try Again");
+            alert("Something seems odd, Please Try Again");
           }
         });
       } else if (placement === "Doctor") {
@@ -74,7 +74,7 @@ const DLogin = () => {
         console.log(data);
         dispatch(DoctorLogin(data)).then((res) => {
           if (res.message === "Successful") {
-            notify("Login Successful");
+            alert("Doctor Login is Successful");
             setLoading(false);
 
             return navigate("/dashboard");
@@ -82,12 +82,12 @@ const DLogin = () => {
           if (res.message === "Wrong credentials") {
             setLoading(false);
 
-            notify("Wrong credentials");
+            alert("Please check your credentials");
           }
           if (res.message === "Error") {
             setLoading(false);
 
-            notify("Something went Wrong, Please Try Again");
+            alert("Something seems odd, Please Try Again");
           }
         });
       } else if (placement === "Admin") {
@@ -97,7 +97,7 @@ const DLogin = () => {
         };
         dispatch(AdminLogin(data)).then((res) => {
           if (res.message === "Successful") {
-            notify("Login Successful");
+            alert("Admin Login is Successful");
             setLoading(false);
 
             return navigate("/dashboard");
@@ -105,50 +105,50 @@ const DLogin = () => {
           if (res.message === "Wrong credentials") {
             setLoading(false);
 
-            notify("Wrong credentials");
+            alert("Please check your credentials");
           }
           if (res.message === "Error") {
             setLoading(false);
 
-            notify("Something went Wrong, Please Try Again");
+            alert("Something seems odd, Please Try Again");
           }
         });
       }
     }
   };
 
-  const placementChange = (e) => {
+  const isPChange = (e) => {
     SetPlacement(e.target.value);
   };
 
-  const [ForgetPassword, setForgetPassword] = useState({
+  const [Forgotpassword, setForgetPassword] = useState({
     type: "",
     email: "",
   });
 
   const HandleForgetPassword = (e) => {
-    setForgetPassword({ ...ForgetPassword, [e.target.name]: e.target.value });
+    setForgetPassword({ ...Forgotpassword, [e.target.name]: e.target.value });
   };
 
   const [forgetLoading, setforgetLoading] = useState(false);
 
   const HandleChangePassword = () => {
-    if (ForgetPassword.type === "") {
-      return notify("Please Fill all Details");
+    if (Forgotpassword.type === "") {
+      return alert("Please enter all Details");
     }
     setforgetLoading(true);
-    dispatch(forgetPassword(ForgetPassword)).then((res) => {
+    dispatch(forgotPassword(Forgotpassword)).then((res) => {
       if (res.message === "User not found") {
         setforgetLoading(false);
-        return notify("User Not Found");
+        return alert("User doesn't look familiar");
       }
       setForgetPassword({
         type: "",
         email: "",
       });
-      onClose();
+      isclose();
       setforgetLoading(false);
-      return notify("Account Details Send");
+      return alert("Send Account Details");
     });
   };
 
@@ -156,16 +156,16 @@ const DLogin = () => {
     <>
       <ToastContainer />
 
-      <div className="mainLoginPage">
-        <div className="leftside">
+      <div className="homeaddDoc">
+        <div className="left">
           <img src={introduction} alt="Intro.jpeg" />
         </div>
-        <div className="rightside">
+        <div className="right">
           <h1>Login</h1>
           <div>
             <Radio.Group
               value={placement}
-              onChange={placementChange}
+              onChange={isPChange}
               className={"radiogroup"}
             >
               <Radio.Button value="Nurse" className={"radiobutton"}>
@@ -183,13 +183,13 @@ const DLogin = () => {
             <img src={administrator} alt="profile" />
           </div>
           <div>
-            <form onSubmit={HandleSubmit}>
+            <form onSubmit={isSubmit}>
               <h3>{placement} ID</h3>
               <input
                 type="number"
                 name="ID"
                 value={formvalue.ID}
-                onChange={Handlechange}
+                onChange={isChange}
                 required
               />
               <h3>Password</h3>
@@ -197,7 +197,7 @@ const DLogin = () => {
                 type="password"
                 name="password"
                 value={formvalue.password}
-                onChange={Handlechange}
+                onChange={isChange}
                 required
               />
               <button type="submit">{Loading ? "Loading..." : "Submit"}</button>
@@ -205,17 +205,17 @@ const DLogin = () => {
                 
                 <span
                   style={{ color: "blue", cursor: "pointer" }}
-                  onClick={showDrawer}
+                  onClick={isShow}
                 >
                   Forgot Password!
                 </span>
               </p>
 
-              {/* ********************************************************* */}
+              {/* *********************Seperation************************* */}
               <Drawer
-                title="Forget Password"
+                title="Forgot Password"
                 placement="left"
-                onClose={onClose}
+                isclose={isclose}
                 open={open}
               >
                 <div>
@@ -223,7 +223,7 @@ const DLogin = () => {
 
                   <select
                     name="type"
-                    value={ForgetPassword.type}
+                    value={Forgotpassword.type}
                     onChange={HandleForgetPassword}
                     required
                   >
@@ -235,13 +235,13 @@ const DLogin = () => {
                 </div>
                 <div>
                   <label style={{ display: "block", fontSize: "18px" }}>
-                    Enter Email
+                    Enter  your Email
                   </label>
                   <input
                     type="email"
                     placeholder="example@mail.com"
                     name="email"
-                    value={ForgetPassword.email}
+                    value={Forgotpassword.email}
                     onChange={HandleForgetPassword}
                     required
                     style={{

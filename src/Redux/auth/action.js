@@ -256,7 +256,7 @@ export const SendPassword = (data) => async (dispatch) => {
 };
 
 //update doctor
-export const forgetPassword = (data) => async (dispatch) => {
+export const forgotPassword = (data) => async (dispatch) => {
   try {
     dispatch({ type: types.FORGET_PASSWORD_REQUEST });
     const res = await axios.post(

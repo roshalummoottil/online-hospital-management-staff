@@ -14,44 +14,44 @@ import {
 import Sidebar from "../../GlobalFiles/Sidebar";
 import { Navigate } from "react-router-dom";
 
-const notify = (text) => toast(text);
+const alert = (text) => toast(text);
 
-const Add_Patient = () => {
+const Addpatient = () => {
   const getBase64 = (img, callback) => {
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result));
-    reader.readAsDataURL(img);
+    const rr = new FileReader();
+    rr.addEventListener("load", () => callback(rr.result));
+    rr.readAsDataURL(img);
   };
 
-  const [loading, setLoading] = useState(false);
+  const [load, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
   const { data } = useSelector((store) => store.auth);
 
-  const beforeUpload = (file) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
+  const bef_upload = (file) => {
+    const jpgorpng = file.type === "image/jpeg" || file.type === "image/png";
+    if (!jpgorpng) {
+      message.error("Sorry! You can only upload either JPG or PNG file.");
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error("Image must smaller than 2MB!");
+    const morethan2 = file.size / 1024 / 1024 < 2;
+    if (!morethan2) {
+      message.error("Image must be smaller than 2MB.");
     }
-    return isJpgOrPng && isLt2M;
+    return jpgorpng && morethan2;
   };
 
-  const initBed = {
+  const isBed = {
     bedNumber: "",
     roomNumber: "",
   };
-  const [bedDetails, setbedDetails] = useState(initBed);
+  const [bedInfo, setbedDetails] = useState(isBed);
 
-  const HandleBedchange = (e) => {
-    setbedDetails({ ...bedDetails, [e.target.name]: e.target.value });
+  const ChangeBed = (e) => {
+    setbedDetails({ ...bedInfo, [e.target.name]: e.target.value });
   };
 
-  const InitData = {
+  const isData = {
     patientName: "",
     patientID: Date.now(),
     age: "",
@@ -69,13 +69,13 @@ const Add_Patient = () => {
     docID: "",
     details: "",
   };
-  const [AddPatient, setAddPatient] = useState(InitData);
+  const [AddPatient, setAddPatient] = useState(isData);
 
-  const HandleAppointment = (e) => {
+  const makeAppointment = (e) => {
     setAddPatient({ ...AddPatient, [e.target.name]: e.target.value });
   };
 
-  const HandleOnsubmitAppointment = (e) => {
+  const makeSubmit = (e) => {
     e.preventDefault();
 
     if (
@@ -84,42 +84,42 @@ const Add_Patient = () => {
       AddPatient.docID === "" ||
       AddPatient.bloodGroup === ""
     ) {
-      return notify("Please Enter All the Requried Feilds");
+      return alert("Please Enter All the Requried Feilds");
     }
     try {
       setLoading(true);
-      dispatch(GetSingleBed(bedDetails)).then((res) => {
-        if (res.message === "Bed not found") {
+      dispatch(GetSingleBed(bedInfo)).then((ans) => {
+        if (ans.message === "Bed not found") {
           setLoading(false);
-          return notify("Bed not found");
+          return alert("Bed not found");
         }
-        if (res.message === "Occupied") {
+        if (ans.message === "Occupied") {
           setLoading(false);
-          return notify("Bed already occupied");
+          return alert("Bed already occupied");
         }
-        if (res.message === "No Bed") {
+        if (ans.message === "No Bed") {
           setLoading(false);
-          return notify("Bed not found");
+          return alert("Bed not found");
         }
-        if (res.message === "Available") {
+        if (ans.message === "Available") {
           dispatch(AddPatients(AddPatient)).then((item) => {
             if (item.message === "Patient already exists") {
               setLoading(false);
-              return notify("Patient already exists");
+              return alert("Patient already exists");
             }
             let data = {
               patientID: item._id,
               occupied: "occupied",
             };
-            notify("Patient Added");
+            alert("Patient Added");
 
-            dispatch(EditSingleBed(data, res.id)).then((ele) =>
+            dispatch(EditSingleBed(data, ans.id)).then((ele) =>
               console.log(ele)
             );
-            notify("Bed updated");
+            alert("Bed updated");
             setLoading(false);
-            setAddPatient(InitData);
-            setbedDetails(initBed);
+            setAddPatient(isData);
+            setbedDetails(isBed);
           });
         } else {
           setLoading(false);
@@ -133,27 +133,6 @@ const Add_Patient = () => {
     }
   };
 
-  // const handleChange = (info) => {
-  //   if (info.file.status === "uploading") {
-  //     setLoading(true);
-  //     return;
-  //   }
-  //   if (info.file.status === "done") {
-  //     // Get this url from response in real world.
-  //     getBase64(info.file.originFileObj, (url) => {
-  //       setLoading(false);
-  //       setImageUrl(url);
-  //     });
-  //   }
-  // };
-
-  // const uploadButton = (
-  //   <div>
-  //     {loading ? <LoadingOutlined /> : <PlusOutlined />}
-  //     <div style={{ marginTop: 8 }}>Upload</div>
-  //   </div>
-  // );
-
   if (data?.isAuthticated === false) {
     return <Navigate to={"/"} />;
   }
@@ -165,15 +144,15 @@ const Add_Patient = () => {
   return (
     <>
       <ToastContainer />
-      <div className="container">
+      <div className="well">
         <Sidebar />
-        <div className="AfterSideBar">
-          <div className="Main_Add_Doctor_div">
+        <div className="besidenavigationmenu">
+          <div className="homeaddDoc">
             <h1>Register New Patient</h1>
             <img src={doctor} alt="doctor" className="avatarimg" />
 
-            <form onSubmit={HandleOnsubmitAppointment}>
-              {/* Name PlaceHolder */}
+            <form onSubmit={makeSubmit}>
+              {/* This is Name section */}
               <div>
                 <label> Name</label>
                 <div className="inputdiv">
@@ -182,12 +161,12 @@ const Add_Patient = () => {
                     placeholder="Full Name"
                     name="patientName"
                     value={AddPatient.patientName}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   />
                 </div>
               </div>
-              {/* EMAIL PLACEHOLDER  */}
+              {/* This is Email section */}
               { <div>
                 <label>Email</label>
                 <div className="inputdiv">
@@ -196,12 +175,12 @@ const Add_Patient = () => {
                     placeholder="abc@abc.com"
                     name="email"
                     value={AddPatient.email}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   />
                 </div>
               </div> }
-              {/* MOBILE PLACEHOLDER */}
+              {/* This is Phone number section */}
               <div>
                 <label>Contact Number</label>
                 <div className="inputdiv">
@@ -210,12 +189,12 @@ const Add_Patient = () => {
                     placeholder="Number"
                     name="mobile"
                     value={AddPatient.mobile}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   />
                 </div>
               </div>
-              {/* AGE PLACEHOLDER  */}
+              {/* This is Age section  */}
               <div>
                 <label>Age</label>
                 <div className="inputdiv">
@@ -224,12 +203,12 @@ const Add_Patient = () => {
                     placeholder="Age"
                     name="age"
                     value={AddPatient.age}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   />
                 </div>
               </div>
-              {/* DATE OF BIRTH  */}
+              {/* This is DoB section  */}
               <div className="dateofAppointment">
                 <p>Birth Date</p>
                 <div className="inputdiv">
@@ -238,19 +217,19 @@ const Add_Patient = () => {
                     placeholder="Choose Date"
                     name="DOB"
                     value={AddPatient.DOB}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   />
                 </div>
               </div>
-              {/* GENDER PLACEHOLDER  */}
+              {/*This is Gender section */}
               <div>
                 <label>Gender</label>
                 <div className="inputdiv">
                   <select
                     name="gender"
                     value={AddPatient.gender}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   >
                     <option value="">Select Gender</option>
@@ -260,12 +239,13 @@ const Add_Patient = () => {
                   </select>
                 </div>
               </div>
+              {/*This is Blood group section */}
               <div>
                 <label>Patient Blood Group</label>
                 <div className="inputdiv">
                   <select
                     name="bloodGroup"
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   >
                     <option value="">Select</option>
@@ -280,7 +260,7 @@ const Add_Patient = () => {
                   </select>
                 </div>
               </div>
-              {/* DATE PLACEHOLDER */}
+              {/*This is Date section */}
               <div>
                 <label>Date</label>
                 <div className="inputdiv">
@@ -289,15 +269,12 @@ const Add_Patient = () => {
                     placeholder="abc@abc.com"
                     name="date"
                     value={AddPatient.date}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   />
                 </div>
               </div>
-              
-              
-              
-
+              {/*This is Details section */}
               <div>
                 <label>Details</label>
                 <div className="inputdiv">
@@ -306,12 +283,12 @@ const Add_Patient = () => {
                     placeholder="Details"
                     name="details"
                     value={AddPatient.details}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   />
                 </div>
               </div>
-
+              {/*This is Disease section */}
               <div>
                 <label>Disease</label>
                 <div className="inputdiv">
@@ -320,13 +297,12 @@ const Add_Patient = () => {
                     placeholder="Disease"
                     name="disease"
                     value={AddPatient.disease}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   />
                 </div>
               </div>
-
-              {/* ADDRESS SECTION  */}
+              {/*This is Address section */}
               <div>
                 <label>Address</label>
                 <div className="inputdiv">
@@ -335,12 +311,12 @@ const Add_Patient = () => {
                     placeholder="Address line 1"
                     name="address"
                     value={AddPatient.address}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   />
                 </div>
               </div>
-
+              {/*This is Beds info section */}
               <div>
                 <label>Bed Number</label>
                 <div className="inputdiv">
@@ -348,12 +324,13 @@ const Add_Patient = () => {
                     type="number"
                     placeholder="bed No"
                     name="bedNumber"
-                    value={bedDetails.bedNumber}
-                    onChange={HandleBedchange}
+                    value={bedInfo.bedNumber}
+                    onChange={ChangeBed}
                     required
                   />
                 </div>
               </div>
+              {/*This is Room info section */}
               <div>
                 <label>Room Number</label>
                 <div className="inputdiv">
@@ -361,20 +338,20 @@ const Add_Patient = () => {
                     type="number"
                     placeholder="room no"
                     name="roomNumber"
-                    value={bedDetails.roomNumber}
-                    onChange={HandleBedchange}
+                    value={bedInfo.roomNumber}
+                    onChange={ChangeBed}
                     required
                   />
                 </div>
               </div>
-
+              {/*This is Department section */}
               <div>
                 <label>Department</label>
                 <div className="inputdiv">
                   <select
                     name="department"
                     value={AddPatient.department}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   >
                     <option value="">Select</option>
@@ -389,13 +366,14 @@ const Add_Patient = () => {
                   </select>
                 </div>
               </div>
+              {/*This is Doctor section */}
               <div>
                 <label>Doctor</label>
                 <div className="inputdiv">
                   <select
                     name="docID"
                     value={AddPatient.docID}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   >
                     <option value="">Select doctor</option>
@@ -408,9 +386,7 @@ const Add_Patient = () => {
                   </select>
                 </div>
               </div>
-
-              
-              {/* PASSWORD*/}
+              {/*This is Password section */}
               <div className="dateofAppointment">
                 <p>Password</p>
                 <div className="inputdiv">
@@ -419,41 +395,18 @@ const Add_Patient = () => {
                     placeholder="Password"
                     name="password"
                     value={AddPatient.password}
-                    onChange={HandleAppointment}
+                    onChange={makeAppointment}
                     required
                   />
                 </div>
               </div>
-              {/* ADD IMAGES  */}
-              {/* <div>
-            <label>Image</label>
-            <div className="inputdiv">
-              <Upload
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                beforeUpload={beforeUpload}
-                onChange={handleChange}
-                style={{ display: "block" }}
-              >
-                {imageUrl ? (
-                  <img src={imageUrl} alt="avatar" style={{ width: "100%" }} />
-                ) : (
-                  uploadButton
-                )}
-              </Upload>
-            </div>
-          </div> */}
-              {/* SUBMIT BUTTON  */}
-
+              {/*This is Submit button section */}
               <button
                 type="submit"
                 className="formsubmitbutton"
                 style={{ width: "20%" }}
               >
-                {loading ? "Loading..." : "Submit"}
+                {load ? "load..." : "Submit"}
               </button>
             </form>
           </div>
@@ -463,4 +416,4 @@ const Add_Patient = () => {
   );
 };
 
-export default Add_Patient;
+export default Addpatient;

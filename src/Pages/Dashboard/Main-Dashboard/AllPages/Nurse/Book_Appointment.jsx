@@ -6,13 +6,13 @@ import { AddPatients, CreateBooking } from "../../../../../Redux/Datas/action";
 import Sidebar from "../../GlobalFiles/Sidebar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-const notify = (text) => toast(text);
+const alert = (text) => toast(text);
 
 const Book_Appointment = () => {
   const dispatch = useDispatch();
-  const [Loading, setLoading] = useState(false);
+  const [load, setLoading] = useState(false);
 
-  const InitValue = {
+  const isValue = {
     patientName: "",
     age: "",
     gender: "",
@@ -25,29 +25,29 @@ const Book_Appointment = () => {
     time: "",
   };
 
-  const [BookAppoint, setBookAppoint] = useState(InitValue);
+  const [makeAppointment, setBookAppoint] = useState(isValue);
 
   const HandleAppointment = (e) => {
-    setBookAppoint({ ...BookAppoint, [e.target.name]: e.target.value });
+    setBookAppoint({ ...makeAppointment, [e.target.name]: e.target.value });
   };
 
   const HandleOnsubmitAppointment = (e) => {
     e.preventDefault();
 
-    if (BookAppoint.gender === "" || BookAppoint.department === "") {
-      return notify("Please fill all the Details");
+    if (makeAppointment.gender === "" || makeAppointment.department === "") {
+      return alert("Please fill all the Details");
     }
     setLoading(true);
-    dispatch(AddPatients({ ...BookAppoint, patientId: Date.now() })).then(
+    dispatch(AddPatients({ ...makeAppointment, patientId: Date.now() })).then(
       (res) => {
         let data = {
-          ...BookAppoint,
+          ...makeAppointment,
           patientId: res.id,
         };
         dispatch(CreateBooking(data));
-        notify("Appointment Booked");
+        alert("Appointment Booked");
         setLoading(false);
-        setBookAppoint(InitValue);
+        setBookAppoint(isValue);
       }
     );
   };
@@ -55,13 +55,13 @@ const Book_Appointment = () => {
   return (
     <>
       <ToastContainer />
-      <div className="container">
+      <div className="well">
         <Sidebar />
-        <div className="AfterSideBar">
-          <div className="Main_Add_Doctor_div">
+        <div className="besidenavigationmenu">
+          <div className="homeaddDoc">
             <h1>Book an Appointment</h1>
             <form onSubmit={HandleOnsubmitAppointment}>
-              {/* Name PlaceHolder */}
+              {/*This is Name section */}
               <div>
                 <label> Name</label>
                 <div className="inputdiv">
@@ -69,12 +69,13 @@ const Book_Appointment = () => {
                     type="text"
                     placeholder="First Name"
                     name="patientName"
-                    value={BookAppoint.patientName}
+                    value={makeAppointment.patientName}
                     onChange={HandleAppointment}
                     required
                   />
                 </div>
               </div>
+              {/*This is Email section */}
               <div>
                 <label>Email</label>
                 <div className="inputdiv">
@@ -82,13 +83,13 @@ const Book_Appointment = () => {
                     type="email"
                     placeholder="example@email.com"
                     name="email"
-                    value={BookAppoint.email}
+                    value={makeAppointment.email}
                     onChange={HandleAppointment}
                     required
                   />
                 </div>
               </div>
-              {/* AGE PLACEHOLDER  */}
+              {/*This is Age section */}
               <div>
                 <label>Age</label>
                 <div className="inputdiv">
@@ -96,19 +97,19 @@ const Book_Appointment = () => {
                     type="number"
                     placeholder="Age"
                     name="age"
-                    value={BookAppoint.age}
+                    value={makeAppointment.age}
                     onChange={HandleAppointment}
                     required
                   />
                 </div>
               </div>
-              {/* GENDER PLACEHOLDER  */}
+              {/*This is Gender section */}
               <div>
                 <label>Gender</label>
                 <div className="inputdiv">
                   <select
                     name="gender"
-                    value={BookAppoint.gender}
+                    value={makeAppointment.gender}
                     onChange={HandleAppointment}
                     required
                   >
@@ -119,7 +120,7 @@ const Book_Appointment = () => {
                   </select>
                 </div>
               </div>
-              {/* MOBILE PLACEHOLDER */}
+              {/*This is Phone no section */}
               <div>
                 <label>Contact Number</label>
                 <div className="inputdiv">
@@ -127,20 +128,20 @@ const Book_Appointment = () => {
                     type="number"
                     placeholder="Number"
                     name="mobile"
-                    value={BookAppoint.mobile}
+                    value={makeAppointment.mobile}
                     onChange={HandleAppointment}
                     required
                   />
                 </div>
               </div>
               
-              {/* PROBLEM PLACEHOLDER */}
+              {/*This is Disease section */}
               <div>
                 <label>Type of Disease</label>
                 <div className="inputdiv">
                   <select
                     name="disease"
-                    value={BookAppoint.disease}
+                    value={makeAppointment.disease}
                     onChange={(e) => {
                       HandleAppointment(e);
                     }}
@@ -157,11 +158,7 @@ const Book_Appointment = () => {
                   </select>
                 </div>
               </div>
-
-              {/* ENTER SAMPLE DISEASE */}
-
-              {/* ADDRESS SECTION  */}
-
+              {/*This is Address section */}
               <div>
                 <label>Address</label>
                 <div className="inputdiv">
@@ -169,20 +166,19 @@ const Book_Appointment = () => {
                     type="text"
                     placeholder="Address line 1"
                     name="address"
-                    value={BookAppoint.address}
+                    value={makeAppointment.address}
                     onChange={HandleAppointment}
                     required
                   />
                 </div>
               </div>
-              {/* DEPARTMENT SECTION */}
-
+              {/*This is Department section */}
               <div>
                 <label>Department</label>
                 <div className="inputdiv">
                   <select
                     name="department"
-                    value={BookAppoint.department}
+                    value={makeAppointment.department}
                     onChange={HandleAppointment}
                     required
                   >
@@ -198,7 +194,7 @@ const Book_Appointment = () => {
                   </select>
                 </div>
               </div>
-              {/* APPOINTMENT DATE  */}
+              {/*This is Appointment section */}
               <div className="dateofAppointment">
                 <p>Date and Time </p>
                 <div className="inputdiv">
@@ -206,7 +202,7 @@ const Book_Appointment = () => {
                     type={"date"}
                     placeholder="Choose Date"
                     name="date"
-                    value={BookAppoint.date}
+                    value={makeAppointment.date}
                     onChange={HandleAppointment}
                     required
                   />
@@ -214,15 +210,15 @@ const Book_Appointment = () => {
                     type={"time"}
                     placeholder="Choose Time"
                     name="time"
-                    value={BookAppoint.time}
+                    value={makeAppointment.time}
                     onChange={HandleAppointment}
                     required
                   />
                 </div>
               </div>
-
+              {/*This is Submit button section */}
               <button type="submit" className="book_formsubmitbutton">
-                {Loading ? "Loading..." : "Book Appointment"}
+                {load ? "load..." : "Book Appointment"}
               </button>
             </form>
           </div>
